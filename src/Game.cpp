@@ -3,7 +3,7 @@
 Game::Game(){
 	displayVideo = NULL;
 	done = false;
-	oldId = newId = 0;
+	oldId = newId = -1;
 	player = WHITE;
 	winner = NONE;
 }
@@ -24,12 +24,19 @@ bool Game::initGame(){
 	return true;
 }
 
+void Game::resetGame(){
+	oldId = newId = -1;
+	player = WHITE;
+	winner = NONE;
+	Checkerboard::gameControl.fillBoard();
+}
+
 void Game::executeGame(){
 	if (!initGame())
 		return;
 
 	SDL_Event event;
-	
+
 	while(!done){
 		checkEvents(&event);
 		checkGameSituation();
@@ -52,8 +59,7 @@ void Game::quitGame(){
 void Game::keyPressedDown(SDLKey key){
 	switch(key){
 		case SDLK_r:
-			Checkerboard::gameControl.initPieces();
-			Checkerboard::gameControl.fillBoard();
+			resetGame();
 			break;
 		case SDLK_ESCAPE:
 			quitGame();
@@ -66,19 +72,33 @@ void Game::mouseLeftPressedDown(int x, int y){
 	id += (y / PIECE_SIZE) * (int)sqrt(BOARD_SIZE);
 
 	if (id < 0 || id >= BOARD_SIZE) return;
-	
-	if (oldId == newId){
-		if (Checkerboard::gameControl.boardGame[id] != NULL && 
-				Checkerboard::gameControl.boardGame[id]->color == player){
-			oldId = id;
-			Checkerboard::gameControl.setValidPositions(id);
-		}
+
+	if (Checkerboard::gameControl.boardGame[id] != NULL && 
+			Checkerboard::gameControl.boardGame[id]->color == player){
+		oldId = id;
+		newId = -1;
+		Checkerboard::gameControl.clearValidPositions();
+		Checkerboard::gameControl.setValidPositions(id);
 	}
 	else
 		newId = id;
 }
 
 void Game::checkGameSituation(){
+	if (oldId != newId){
+		for (int i = 0; i < Checkerboard::gameControl.validPositions.size();
+				i++){
+			if (Checkerboard::gameControl.validPositions[i] == newId){
+				Checkerboard::gameControl.movePiece(oldId,newId);
+				if (player == WHITE)
+					player = BLACK;
+				else
+					player = WHITE;
+				Checkerboard::gameControl.clearValidPositions();
+				oldId = newId = -1;
+			}
+		}
+	}
 }
 
 void Game::renderImages(){
@@ -91,4 +111,3 @@ void Game::endGame(){
 	Checkerboard::gameControl.cleanBoard();
 	SDL_Quit();
 }
-

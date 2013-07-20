@@ -21,6 +21,7 @@ class Piece{
 	public:
 		Piece();
 		int color;
+		int type;
 		virtual std::vector<int> positionValues(int id, 
 						std::vector<Piece*> board);
 		

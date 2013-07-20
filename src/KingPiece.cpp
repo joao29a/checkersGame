@@ -2,6 +2,7 @@
 
 KingPiece::KingPiece(int color){
 	this->color = color;
+	type = KING;
 }
 
 std::vector<int> KingPiece::positionValues(int id, std::vector<Piece*> board){

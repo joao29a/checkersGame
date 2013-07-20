@@ -18,6 +18,7 @@ class Game: public EventHandler{
 	public:
 		Game();
 		bool initGame();
+		void resetGame();
 		void executeGame();
 		void endGame();
 		void checkEvents(SDL_Event* event);

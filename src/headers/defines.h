@@ -16,6 +16,7 @@
 
 enum{
 	NONE = 0,
+	KING,
 	WHITE,
 	BLACK
 };

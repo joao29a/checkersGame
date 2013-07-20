@@ -2,6 +2,7 @@
 
 Piece::Piece(){
 	color = NONE;
+	type = NONE;
 }
 
 vector<int> Piece::positionValues(int id, vector<Piece*> board){
@@ -11,18 +12,30 @@ vector<int> Piece::positionValues(int id, vector<Piece*> board){
 
 	for (int i = 0; i < 2; i++){
 		if (id % (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1){
+
+			if (this->color == BLACK)
+				incrementDiagonal(diagId,id,diagonal,&values,board);
 			diagonal += 2;
-			continue;
+			i++;
+			if (this->color == WHITE)
+				decrementDiagonal(diagId,id,diagonal,&values,board);
+		}
+		if (id % (int)sqrt(BOARD_SIZE) == 0){
+		
+			if (this->color == WHITE)
+				decrementDiagonal(diagId,id,diagonal,&values,board);
+			diagonal += 2;
+			i++;
+			if (this->color == BLACK)
+				incrementDiagonal(diagId,id,diagonal,&values,board);
 		}
 
-		if (this->color == WHITE)
-			decrementDiagonal(diagId,id,diagonal,&values,board);
-		else
-			incrementDiagonal(diagId,id,diagonal,&values,board);
-
-		if (id % (int)sqrt(BOARD_SIZE) == 0)
-			return values;
-
+		else{
+			if (this->color == WHITE)
+				decrementDiagonal(diagId,id,diagonal,&values,board);
+			else 
+				incrementDiagonal(diagId,id,diagonal,&values,board);
+		}
 		diagonal += 2;
 	}
 
@@ -30,7 +43,7 @@ vector<int> Piece::positionValues(int id, vector<Piece*> board){
 }
 
 void Piece::markPosition(int diagId, int diagonal, vector<int>* values, 
-					vector<Piece*> board){
+		vector<Piece*> board){
 	if (board[diagId] != NULL){
 		if (this->color == WHITE && board[diagId]->color == BLACK && 
 				board[diagId -= diagonal] == NULL){
@@ -46,15 +59,14 @@ void Piece::markPosition(int diagId, int diagonal, vector<int>* values,
 }
 
 void Piece::decrementDiagonal(int diagId, int id, int diagonal,
-				vector<int>* values, vector<Piece*> board){
-		diagId = id - diagonal;
-		markPosition(diagId,diagonal,values,board);
+		vector<int>* values, vector<Piece*> board){
+	diagId = id - diagonal;
+	markPosition(diagId,diagonal,values,board);
 
 }
 
 void Piece::incrementDiagonal(int diagId, int id, int diagonal,
-				vector<int>* values, vector<Piece*> board){
-		diagId = id + diagonal;
-		markPosition(diagId,diagonal,values,board);
-
+		vector<int>* values, vector<Piece*> board){
+	diagId = id + diagonal;
+	markPosition(diagId,diagonal,values,board);
 }
