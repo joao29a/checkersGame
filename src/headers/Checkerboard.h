@@ -16,6 +16,7 @@ class Checkerboard{
 		SDL_Surface* whiteImage;
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
+		SDL_Surface* validImage;
 		
 
 	public:

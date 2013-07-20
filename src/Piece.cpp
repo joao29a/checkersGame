@@ -45,8 +45,13 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 
 void Piece::markPosition(int diagId, int diagonal, map<int,int>* values, 
 		vector<Piece*> board){
-	if (board[diagId] != NULL){
-		if (this->color == WHITE && board[diagId]->color == BLACK && 
+	if (board[diagId] != NULL) {
+		
+		if (diagId % (int)sqrt(BOARD_SIZE) == 0 ||
+				diagId % (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1)
+			return;
+
+		if (this->color == WHITE && board[diagId]->color == BLACK &&
 				board[diagId -= diagonal] == NULL){
 			values->insert(pair<int,int>(diagId,diagId + diagonal));
 			canKill = true;
@@ -56,6 +61,7 @@ void Piece::markPosition(int diagId, int diagonal, map<int,int>* values,
 			values->insert(pair<int,int>(diagId,diagId - diagonal));
 			canKill = true;
 		}
+
 	}
 	else
 		values->insert(pair<int,int>(diagId,-1));

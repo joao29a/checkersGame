@@ -14,9 +14,10 @@ bool Checkerboard::loadImages(){
 	whiteImage = Render::assignImage(WHITE_IMAGE);
 	blackImage = Render::assignImage(BLACK_IMAGE);
 	boardImage = Render::assignImage(BOARD_IMAGE);
+	validImage = Render::assignImage(VALID_IMAGE);
 
 	if (whiteImage == NULL || blackImage == NULL || 
-			boardImage == NULL)
+			boardImage == NULL || validImage == NULL)
 		return false;
 
 	return true;
@@ -43,7 +44,7 @@ void Checkerboard::initBoard(){
 
 void Checkerboard::fillBoard(){
 	initBoard();
-	
+
 	int notFillBegin = ((sqrt(BOARD_SIZE) / 2) - 1) * sqrt(BOARD_SIZE);
 	int notFillEnd = (((sqrt(BOARD_SIZE) / 2) + 1) * sqrt(BOARD_SIZE));
 
@@ -98,14 +99,25 @@ void Checkerboard::updatePieces(SDL_Surface* displayVideo){
 		if (boardGame[i] == NULL)
 			Render::drawImage(displayVideo,boardImage,x,y,
 					((i + oppositeSum) % 2) * PIECE_SIZE,0,PIECE_SIZE, 
-							PIECE_SIZE);
+					PIECE_SIZE);
 		else if (boardGame[i]->color == BLACK)
-			Render::drawImage(displayVideo,blackImage,x,y,
-					boardGame[i]->type * PIECE_SIZE,0,PIECE_SIZE,PIECE_SIZE);
+			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
+					* PIECE_SIZE, blackImage, x, y, boardGame[i]->type * 
+					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
 		else
-			Render::drawImage(displayVideo,whiteImage,x,y,
-					boardGame[i]->type * PIECE_SIZE,0,PIECE_SIZE,PIECE_SIZE);
+			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
+					* PIECE_SIZE, whiteImage, x, y, boardGame[i]->type * 
+					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
+	}
 
+	map<int,int>::iterator itValue;
+	for (itValue = validPositions.begin(); itValue != validPositions.end();
+			++itValue){
+		int x = (itValue->first % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int y = (itValue->first / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+
+		Render::drawImage(displayVideo,validImage,x,y,0,0,PIECE_SIZE,
+				PIECE_SIZE);
 	}
 }
 

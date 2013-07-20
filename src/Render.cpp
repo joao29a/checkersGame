@@ -29,3 +29,9 @@ void Render::drawImage(SDL_Surface* dest, SDL_Surface* src, int x,
 
 	SDL_BlitSurface(src,&srcRec,dest,&destRec);
 }
+
+void Render::drawImage(SDL_Surface* final, SDL_Surface* dest, int type,
+		SDL_Surface* src, int x, int y, int x2, int y2, int w, int h){
+	drawImage(final,dest,x,y,type,y2,w,h);
+	drawImage(final,src,x,y,x2,y2,w,h);
+}

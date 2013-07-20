@@ -13,6 +13,7 @@
 #define WHITE_IMAGE "images/white.png"
 #define BLACK_IMAGE "images/black.png"
 #define BOARD_IMAGE "images/board.png"
+#define VALID_IMAGE "images/valid.png"
 
 enum{
 	NONE = 0,
