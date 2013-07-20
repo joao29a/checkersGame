@@ -1,7 +1,5 @@
 #include "headers/Checkerboard.h"
 
-Checkerboard Checkerboard::gameControl;
-
 Checkerboard::Checkerboard(){
 	initPieces();
 	initBoard();
@@ -37,6 +35,8 @@ void Checkerboard::initPieces(){
 }
 
 void Checkerboard::initBoard(){
+	whiteNumbers = WHITE_TOTAL;
+	blackNumbers = BLACK_TOTAL;
 	boardGame.clear();
 	boardGame.resize(BOARD_SIZE,NULL);
 }
@@ -74,9 +74,16 @@ void Checkerboard::clearValidPositions(){
 	validPositions.clear();
 }
 
-void Checkerboard::movePiece(int oldId, int newId){
+void Checkerboard::movePiece(int oldId, int newId, int removeId){
 	boardGame[newId] = boardGame[oldId];
 	boardGame[oldId] = NULL;
+	if (removeId != -1){
+		if (boardGame[removeId]->color == WHITE)
+			whiteNumbers--;
+		else
+			blackNumbers--;
+		boardGame[removeId] = NULL;
+	}
 }
 
 void Checkerboard::updatePieces(SDL_Surface* displayVideo){

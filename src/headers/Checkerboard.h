@@ -2,6 +2,7 @@
 #define CHECKERBOARD_H
 
 #include <vector>
+#include <map>
 #include <cmath>
 #include <iostream>
 #include "SDL/SDL.h"
@@ -20,10 +21,9 @@ class Checkerboard{
 	public:
 		Checkerboard();
 		std::vector<Piece*> boardGame;
-		std::vector<int> validPositions;
+		std::map<int,int> validPositions;
 		int whiteNumbers;
 		int blackNumbers;
-		static Checkerboard gameControl;
 		void initPieces();
 		void initBoard();
 		void fillBoard();
@@ -32,7 +32,7 @@ class Checkerboard{
 		bool loadImages();
 		void cleanBoard();
 		void updatePieces(SDL_Surface* displayVideo);
-		void movePiece(int oldId, int newId);
+		void movePiece(int oldId, int newId, int removeId);
 };
 
 #endif

@@ -18,7 +18,7 @@ bool Game::initGame(){
 	if (displayVideo == NULL)
 		return false;
 
-	if (!Checkerboard::gameControl.loadImages())
+	if (!gameControl.loadImages())
 		return false;
 
 	return true;
@@ -28,7 +28,7 @@ void Game::resetGame(){
 	oldId = newId = -1;
 	player = WHITE;
 	winner = NONE;
-	Checkerboard::gameControl.fillBoard();
+	gameControl.fillBoard();
 }
 
 void Game::executeGame(){
@@ -73,12 +73,12 @@ void Game::mouseLeftPressedDown(int x, int y){
 
 	if (id < 0 || id >= BOARD_SIZE) return;
 
-	if (Checkerboard::gameControl.boardGame[id] != NULL && 
-			Checkerboard::gameControl.boardGame[id]->color == player){
+	if (gameControl.boardGame[id] != NULL && 
+			gameControl.boardGame[id]->color == player){
 		oldId = id;
 		newId = -1;
-		Checkerboard::gameControl.clearValidPositions();
-		Checkerboard::gameControl.setValidPositions(id);
+		gameControl.clearValidPositions();
+		gameControl.setValidPositions(id);
 	}
 	else
 		newId = id;
@@ -86,28 +86,37 @@ void Game::mouseLeftPressedDown(int x, int y){
 
 void Game::checkGameSituation(){
 	if (oldId != newId){
-		for (int i = 0; i < Checkerboard::gameControl.validPositions.size();
-				i++){
-			if (Checkerboard::gameControl.validPositions[i] == newId){
-				Checkerboard::gameControl.movePiece(oldId,newId);
+		map<int,int>::iterator itValues;
+		for (itValues = gameControl.validPositions.begin(); 
+				itValues != gameControl.validPositions.end(); ++itValues){
+			if (itValues->first == newId){
+				gameControl.movePiece(oldId,newId,itValues->second);
 				if (player == WHITE)
 					player = BLACK;
 				else
 					player = WHITE;
-				Checkerboard::gameControl.clearValidPositions();
+				gameControl.clearValidPositions();
 				oldId = newId = -1;
 			}
 		}
 	}
+
+	if (gameControl.whiteNumbers == 0)
+		winner = BLACK;
+	else if (gameControl.blackNumbers == 0)
+		winner = WHITE;
+
+	if (winner != NONE)
+		quitGame();
 }
 
 void Game::renderImages(){
-	Checkerboard::gameControl.updatePieces(displayVideo);
+	gameControl.updatePieces(displayVideo);
 	SDL_Flip(displayVideo);
 }
 
 void Game::endGame(){
 	SDL_FreeSurface(displayVideo);
-	Checkerboard::gameControl.cleanBoard();
+	gameControl.cleanBoard();
 	SDL_Quit();
 }

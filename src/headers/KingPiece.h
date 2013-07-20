@@ -6,7 +6,7 @@
 class KingPiece: public Piece{
 	public:
 		KingPiece(int color);
-		std::vector<int> positionValues(int id, std::vector<Piece*> board);
+			map<int,int> positionValues(int id, vector<Piece*> board);
 };
 
 #endif

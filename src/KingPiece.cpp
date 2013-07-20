@@ -5,8 +5,8 @@ KingPiece::KingPiece(int color){
 	type = KING;
 }
 
-std::vector<int> KingPiece::positionValues(int id, std::vector<Piece*> board){
-	std::vector<int> values;
+map<int,int> KingPiece::positionValues(int id, std::vector<Piece*> board){
+	map<int,int> values;
 	int diagonal = (int)sqrt(BOARD_SIZE) - 1;
 	int diagId;
 
@@ -31,5 +31,6 @@ std::vector<int> KingPiece::positionValues(int id, std::vector<Piece*> board){
 			diagonal += 2;
 		}
 	}
+	removeUnkilledPositions(&values);
 	return values;
 }

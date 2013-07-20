@@ -7,6 +7,8 @@
 #include "EventHandler.h"
 #include "defines.h"
 
+using namespace std;
+
 class Game: public EventHandler{
 	private:
 		int player;
@@ -15,6 +17,7 @@ class Game: public EventHandler{
 		int oldId, newId;
 		SDL_Surface* displayVideo;
 		void renderImages();
+		Checkerboard gameControl;
 	public:
 		Game();
 		bool initGame();
