@@ -8,6 +8,7 @@ class EventHandler{
 		void eventType(SDL_Event* event);
 		virtual void quitGame();
 		virtual void keyPressedDown(SDLKey key);
+		virtual void mouseLeftPressedDown(int x, int y);
 };
 
 #endif

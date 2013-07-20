@@ -10,17 +10,21 @@
 class Game: public EventHandler{
 	private:
 		int player;
+		int winner;
 		bool done;
+		int oldId, newId;
 		SDL_Surface* displayVideo;
 		void renderImages();
 	public:
 		Game();
 		bool initGame();
 		void executeGame();
-		void cleanGame();
+		void endGame();
 		void checkEvents(SDL_Event* event);
+		void checkGameSituation();
 		void quitGame();
 		void keyPressedDown(SDLKey key);
+		void mouseLeftPressedDown(int x, int y);
 };
 
 #endif

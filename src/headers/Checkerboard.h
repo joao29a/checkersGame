@@ -5,32 +5,30 @@
 #include <cmath>
 #include <iostream>
 #include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include "Render.h"
 #include "Piece.h"
 #include "defines.h"
 
 class Checkerboard{
 	private:
 		std::vector<Piece> gamePieces;
-		std::vector<Piece*> boardGame;
+		std::vector<int> validPositions;
 		SDL_Surface* whiteImage;
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
-		SDL_Surface* assignImage(const char* file);
-		void drawImage(SDL_Surface* dest, SDL_Surface* src,
-				int x, int y, int x2, int y2, int w, int h);
 
 	public:
 		Checkerboard();
+		std::vector<Piece*> boardGame;
 		int whiteNumbers;
 		int blackNumbers;
-		int winnerGame;
 		static Checkerboard gameControl;
 		void initPieces();
-		bool fillBoard();
+		void fillBoard();
+		void setValidPositions(int id);
 		bool loadImages();
 		void cleanBoard();
-		void renderImages(SDL_Surface* displayVideo);
+		void updatePieces(SDL_Surface* displayVideo);
 };
 
 #endif

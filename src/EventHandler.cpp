@@ -5,6 +5,9 @@ void EventHandler::eventType(SDL_Event* event){
 		case SDL_KEYDOWN:
 			keyPressedDown(event->key.keysym.sym);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			mouseLeftPressedDown(event->button.x,event->button.y);
+			break;
 		case SDL_QUIT:
 			quitGame();
 			break;
@@ -13,3 +16,4 @@ void EventHandler::eventType(SDL_Event* event){
 
 void EventHandler::quitGame(){}
 void EventHandler::keyPressedDown(SDLKey key){}
+void EventHandler::mouseLeftPressedDown(int x, int y){}

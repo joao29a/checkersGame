@@ -7,7 +7,7 @@
 #define BLACK_TOTAL 12
 #define TOTAL_PIECES WHITE_TOTAL+BLACK_TOTAL
 #define BOARD_SIZE 64 //8x8
-#define PIECE_SIZE WIDTH_RESOLUTION / sqrt(BOARD_SIZE)
+#define PIECE_SIZE 80 //80x80 pixels WIDTH_RESOLUTION / sqrt(BOARD_SIZE)
 #define REVERSE_TABLE 0 // 0 or 1 
 #define REVERSE_PIECE !REVERSE_TABLE //! for black, without for white
 #define WHITE_IMAGE "images/white.png"
@@ -15,11 +15,7 @@
 #define BOARD_IMAGE "images/board.png"
 
 enum{
-	NONE_WINNER = 0,
-	WHITE_WINNER,
-	BLACK_WINNER,
-	DEAD,
-	ALIVE,
+	NONE = 0,
 	WHITE,
 	BLACK
 };

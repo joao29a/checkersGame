@@ -3,7 +3,9 @@
 Game::Game(){
 	displayVideo = NULL;
 	done = false;
+	oldId = newId = 0;
 	player = WHITE;
+	winner = NONE;
 }
 
 bool Game::initGame(){
@@ -30,10 +32,11 @@ void Game::executeGame(){
 	
 	while(!done){
 		checkEvents(&event);
+		checkGameSituation();
 		renderImages();
 	}
 
-	cleanGame();
+	endGame();
 
 }
 
@@ -58,14 +61,34 @@ void Game::keyPressedDown(SDLKey key){
 	}
 }
 
+void Game::mouseLeftPressedDown(int x, int y){
+	int id = x / PIECE_SIZE;
+	id += (y / PIECE_SIZE) * (int)sqrt(BOARD_SIZE);
+
+	if (id < 0 || id >= BOARD_SIZE) return;
+	
+	if (oldId == newId){
+		if (Checkerboard::gameControl.boardGame[id] != NULL && 
+				Checkerboard::gameControl.boardGame[id]->color == player){
+			oldId = id;
+			Checkerboard::gameControl.setValidPositions(id);
+		}
+	}
+	else
+		newId = id;
+}
+
+void Game::checkGameSituation(){
+}
+
 void Game::renderImages(){
-	Checkerboard::gameControl.renderImages(displayVideo);
+	Checkerboard::gameControl.updatePieces(displayVideo);
 	SDL_Flip(displayVideo);
 }
 
-void Game::cleanGame(){
+void Game::endGame(){
 	SDL_FreeSurface(displayVideo);
 	Checkerboard::gameControl.cleanBoard();
-	SDL_Quit;
+	SDL_Quit();
 }
 
