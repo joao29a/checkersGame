@@ -1,13 +1,13 @@
 #include "headers/Checkerboard.h"
 
 Checkerboard::Checkerboard(){
-	initPieces();
 	initBoard();
 	whiteNumbers = WHITE_TOTAL;
 	blackNumbers = BLACK_TOTAL;
 	whiteImage = NULL;
 	blackImage = NULL;
 	boardImage = NULL;
+	validImage = NULL;
 }
 
 bool Checkerboard::loadImages(){
@@ -24,6 +24,7 @@ bool Checkerboard::loadImages(){
 }
 
 void Checkerboard::initPieces(){
+	clearPieces();
 	for (int i = 0; i < TOTAL_PIECES; i++){
 		Piece *tempPiece = new Piece;
 		if (i < TOTAL_PIECES - WHITE_TOTAL)
@@ -33,11 +34,11 @@ void Checkerboard::initPieces(){
 
 		gamePieces.push_back(tempPiece);
 	}
+	whiteNumbers = WHITE_TOTAL;
+	blackNumbers = BLACK_TOTAL;
 }
 
 void Checkerboard::initBoard(){
-	whiteNumbers = WHITE_TOTAL;
-	blackNumbers = BLACK_TOTAL;
 	boardGame.clear();
 	boardGame.resize(BOARD_SIZE,NULL);
 }
@@ -71,27 +72,30 @@ void Checkerboard::setValidPositions(int id){
 	validPositions = boardGame[id]->positionValues(id,boardGame);
 }
 
-void Checkerboard::clearValidPositions(){
-	validPositions.clear();
-}
 
-void Checkerboard::movePiece(int oldId, int newId, int removeId){
+void Checkerboard::movePiece(int oldId, int newId){
 	boardGame[newId] = boardGame[oldId];
 	boardGame[oldId] = NULL;
+
+}
+
+void Checkerboard::removePiece(int removeId){
 	if (removeId != -1){
 		if (boardGame[removeId]->color == WHITE)
 			whiteNumbers--;
-		else
+
+		else if (boardGame[removeId]->color == BLACK)
 			blackNumbers--;
+
 		boardGame[removeId] = NULL;
 	}
 }
 
 void Checkerboard::checkPromotion(int id){
 	if ((id / (int)sqrt(BOARD_SIZE) == 0 && 
-			boardGame[id]->color == WHITE) || 
-				(id / (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1
-				&& boardGame[id]->color == BLACK)){
+				boardGame[id]->color == WHITE) || 
+			(id / (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1
+			 && boardGame[id]->color == BLACK)){
 
 		delete boardGame[id];
 		boardGame[id] = new KingPiece(boardGame[id]->color);
@@ -111,11 +115,13 @@ void Checkerboard::updatePieces(SDL_Surface* displayVideo){
 			Render::drawImage(displayVideo,boardImage,x,y,
 					((i + oppositeSum) % 2) * PIECE_SIZE,0,PIECE_SIZE, 
 					PIECE_SIZE);
+
 		else if (boardGame[i]->color == BLACK)
 			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
 					* PIECE_SIZE, blackImage, x, y, boardGame[i]->type * 
 					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
-		else
+
+		else if (boardGame[i]->color == WHITE)
 			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
 					* PIECE_SIZE, whiteImage, x, y, boardGame[i]->type * 
 					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
@@ -132,11 +138,23 @@ void Checkerboard::updatePieces(SDL_Surface* displayVideo){
 	}
 }
 
-void Checkerboard::cleanBoard(){
+void Checkerboard::clearValidPositions(){
+	validPositions.clear();
+}
+
+void Checkerboard::clearPieces(){
+	for (int i = 0; i < gamePieces.size(); i++){
+		delete gamePieces[i];
+	}
+	gamePieces.clear();
+}
+
+void Checkerboard::clearBoard(){
 	SDL_FreeSurface(whiteImage);
 	SDL_FreeSurface(blackImage);
 	SDL_FreeSurface(boardImage);
-	boardGame.clear();
-	gamePieces.clear();
+	SDL_FreeSurface(validImage);
+	clearPieces();
 	clearValidPositions();
+	boardGame.clear();
 }

@@ -3,9 +3,8 @@
 Game::Game(){
 	displayVideo = NULL;
 	done = false;
-	oldId = newId = -1;
-	player = WHITE;
 	winner = NONE;
+	oldId = newId = -1;
 }
 
 bool Game::initGame(){
@@ -28,6 +27,7 @@ void Game::resetGame(){
 	oldId = newId = -1;
 	player = WHITE;
 	winner = NONE;
+	gameControl.initPieces();
 	gameControl.fillBoard();
 }
 
@@ -90,7 +90,8 @@ void Game::checkGameSituation(){
 		for (itValues = gameControl.validPositions.begin(); 
 				itValues != gameControl.validPositions.end(); ++itValues){
 			if (itValues->first == newId){
-				gameControl.movePiece(oldId,newId,itValues->second);
+				gameControl.movePiece(oldId,newId);
+				gameControl.removePiece(itValues->second);
 				gameControl.checkPromotion(newId);
 				if (player == WHITE)
 					player = BLACK;
@@ -118,6 +119,6 @@ void Game::renderImages(){
 
 void Game::endGame(){
 	SDL_FreeSurface(displayVideo);
-	gameControl.cleanBoard();
+	gameControl.clearBoard();
 	SDL_Quit();
 }

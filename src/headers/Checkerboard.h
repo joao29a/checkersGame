@@ -26,16 +26,18 @@ class Checkerboard{
 		std::map<int,int> validPositions;
 		int whiteNumbers;
 		int blackNumbers;
+		bool loadImages();
 		void initPieces();
 		void initBoard();
 		void fillBoard();
+		void movePiece(int oldId, int newId);
+		void removePiece(int removeId);
+		void checkPromotion(int id);
+		void updatePieces(SDL_Surface* displayVideo);
 		void setValidPositions(int id);
 		void clearValidPositions();
-		bool loadImages();
-		void cleanBoard();
-		void updatePieces(SDL_Surface* displayVideo);
-		void movePiece(int oldId, int newId, int removeId);
-		void checkPromotion(int id);
+		void clearPieces();
+		void clearBoard();
 };
 
 #endif
