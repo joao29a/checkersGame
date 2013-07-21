@@ -60,7 +60,8 @@ void Checkerboard::fillBoard(){
 		}
 		if (i % (int)sqrt(BOARD_SIZE) == 0)
 			oppositeSum = !oppositeSum;
-		if (gamePieces[piecesPos]->color == fillTurn && 
+		if (gamePieces[piecesPos] != NULL && 
+				gamePieces[piecesPos]->color == fillTurn && 
 				((i + oppositeSum) % 2 == 0)){
 			boardGame[i] = gamePieces[piecesPos];
 			piecesPos++;
