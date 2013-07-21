@@ -29,6 +29,7 @@ void Game::resetGame(){
 	winner = NONE;
 	gameControl.initPieces();
 	gameControl.fillBoard();
+	gameControl.clearValidPositions();
 }
 
 void Game::executeGame(){
