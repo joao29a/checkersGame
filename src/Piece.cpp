@@ -45,6 +45,8 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 
 void Piece::markPosition(int diagId, int diagonal, map<int,int>* values, 
 		vector<Piece*> board){
+	if (diagId < 0 || diagId >= BOARD_SIZE) return;
+
 	if (board[diagId] != NULL) {
 
 		if (diagId % (int)sqrt(BOARD_SIZE) == 0 ||
