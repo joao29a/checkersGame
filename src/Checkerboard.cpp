@@ -25,11 +25,11 @@ bool Checkerboard::loadImages(){
 
 void Checkerboard::initPieces(){
 	for (int i = 0; i < TOTAL_PIECES; i++){
-		Piece tempPiece;
+		Piece *tempPiece = new Piece;
 		if (i < TOTAL_PIECES - WHITE_TOTAL)
-			tempPiece.color = BLACK;
+			tempPiece->color = BLACK;
 		else
-			tempPiece.color = WHITE;
+			tempPiece->color = WHITE;
 
 		gamePieces.push_back(tempPiece);
 	}
@@ -59,9 +59,9 @@ void Checkerboard::fillBoard(){
 		}
 		if (i % (int)sqrt(BOARD_SIZE) == 0)
 			oppositeSum = !oppositeSum;
-		if (gamePieces[piecesPos].color == fillTurn && 
+		if (gamePieces[piecesPos]->color == fillTurn && 
 				((i + oppositeSum) % 2 == 0)){
-			boardGame[i] = &gamePieces[piecesPos];
+			boardGame[i] = gamePieces[piecesPos];
 			piecesPos++;
 		}
 	}
@@ -84,6 +84,17 @@ void Checkerboard::movePiece(int oldId, int newId, int removeId){
 		else
 			blackNumbers--;
 		boardGame[removeId] = NULL;
+	}
+}
+
+void Checkerboard::checkPromotion(int id){
+	if ((id / (int)sqrt(BOARD_SIZE) == 0 && 
+			boardGame[id]->color == WHITE) || 
+				(id / (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1
+				&& boardGame[id]->color == BLACK)){
+
+		delete boardGame[id];
+		boardGame[id] = new KingPiece(boardGame[id]->color);
 	}
 }
 

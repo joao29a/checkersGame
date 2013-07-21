@@ -91,6 +91,7 @@ void Game::checkGameSituation(){
 				itValues != gameControl.validPositions.end(); ++itValues){
 			if (itValues->first == newId){
 				gameControl.movePiece(oldId,newId,itValues->second);
+				gameControl.checkPromotion(newId);
 				if (player == WHITE)
 					player = BLACK;
 				else

@@ -8,11 +8,12 @@
 #include "SDL/SDL.h"
 #include "Render.h"
 #include "Piece.h"
+#include "KingPiece.h"
 #include "defines.h"
 
 class Checkerboard{
 	private:
-		std::vector<Piece> gamePieces;
+		std::vector<Piece*> gamePieces;
 		SDL_Surface* whiteImage;
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
@@ -34,6 +35,7 @@ class Checkerboard{
 		void cleanBoard();
 		void updatePieces(SDL_Surface* displayVideo);
 		void movePiece(int oldId, int newId, int removeId);
+		void checkPromotion(int id);
 };
 
 #endif

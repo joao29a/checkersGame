@@ -22,7 +22,7 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 			break;
 		}
 		if (id % (int)sqrt(BOARD_SIZE) == 0){
-		
+
 			if (this->color == WHITE)
 				decrementDiagonal(diagId,id,diagonal,&values,board);
 			diagonal += 2;
@@ -46,25 +46,30 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 void Piece::markPosition(int diagId, int diagonal, map<int,int>* values, 
 		vector<Piece*> board){
 	if (board[diagId] != NULL) {
-		
+
 		if (diagId % (int)sqrt(BOARD_SIZE) == 0 ||
 				diagId % (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1)
 			return;
-
-		if (this->color == WHITE && board[diagId]->color == BLACK &&
-				board[diagId -= diagonal] == NULL){
-			values->insert(pair<int,int>(diagId,diagId + diagonal));
-			canKill = true;
-		}
-		else if (this->color == BLACK && board[diagId]->color == WHITE && 
-				board[diagId += diagonal] == NULL){
-			values->insert(pair<int,int>(diagId,diagId - diagonal));
-			canKill = true;
-		}
-
+		selectTarget(diagId,diagonal,values,board);
 	}
 	else
 		values->insert(pair<int,int>(diagId,-1));
+}
+
+
+void Piece::selectTarget(int diagId, int diagonal, map<int,int>* values,
+		vector<Piece*> board){
+
+	if (this->color == WHITE && board[diagId]->color == BLACK &&
+			board[diagId - diagonal] == NULL){
+		values->insert(pair<int,int>(diagId - diagonal,diagId));
+		canKill = true;
+	}
+	else if (this->color == BLACK && board[diagId]->color == WHITE && 
+			board[diagId + diagonal] == NULL){
+		values->insert(pair<int,int>(diagId + diagonal,diagId));
+		canKill = true;
+	}
 }
 
 void Piece::decrementDiagonal(int diagId, int id, int diagonal,

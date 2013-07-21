@@ -13,6 +13,9 @@ class Piece{
 	protected:
 		void markPosition(int diagId, int diagonal, map<int,int>* values, 
 				vector<Piece*> board);
+		
+		virtual void selectTarget(int diagId, int diagonal, map<int,int>* values,
+						vector<Piece*> board);
 
 		void incrementDiagonal(int diagId, int id, int diagonal,
 				map<int,int>* values, vector<Piece*> board);
