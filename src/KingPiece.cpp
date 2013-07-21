@@ -8,7 +8,7 @@ KingPiece::KingPiece(int color){
 map<int,int> KingPiece::positionValues(int id, std::vector<Piece*> board){
 	map<int,int> values;
 	int diagonal = (int)sqrt(BOARD_SIZE) - 1;
-	int diagId;
+	int diagId = 0;
 
 	for (int i = 0; i < 2; i++){
 

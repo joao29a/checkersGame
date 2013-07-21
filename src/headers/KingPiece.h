@@ -9,7 +9,8 @@ class KingPiece: public Piece{
 				vector<Piece*> board);
 	public:
 		KingPiece(int color);
-			map<int,int> positionValues(int id, vector<Piece*> board);
+		~KingPiece(){}
+		map<int,int> positionValues(int id, vector<Piece*> board);
 };
 
 #endif

@@ -64,6 +64,8 @@ void Game::keyPressedDown(SDLKey key){
 		case SDLK_ESCAPE:
 			quitGame();
 			break;
+		default:
+			break;
 	}
 }
 

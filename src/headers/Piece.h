@@ -29,6 +29,7 @@ class Piece{
 
 	public:
 		Piece();
+		virtual ~Piece(){}
 		int color;
 		int type;
 		virtual map<int,int> positionValues(int id, 

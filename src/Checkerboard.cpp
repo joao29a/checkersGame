@@ -143,7 +143,7 @@ void Checkerboard::clearValidPositions(){
 }
 
 void Checkerboard::clearPieces(){
-	for (int i = 0; i < gamePieces.size(); i++){
+	for (Uint32 i = 0; i < gamePieces.size(); i++){
 		delete gamePieces[i];
 	}
 	gamePieces.clear();
