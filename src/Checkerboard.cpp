@@ -1,9 +1,8 @@
 #include "headers/Checkerboard.h"
 
 Checkerboard::Checkerboard(){
-	initBoard();
-	whiteNumbers = WHITE_TOTAL;
-	blackNumbers = BLACK_TOTAL;
+	initPieces();
+	fillBoard();
 	whiteImage = NULL;
 	blackImage = NULL;
 	boardImage = NULL;
@@ -70,7 +69,33 @@ void Checkerboard::fillBoard(){
 }
 
 void Checkerboard::setValidPositions(int id){
+	clearValidPositions();
 	validPositions = boardGame[id]->positionValues(id,boardGame);
+}
+
+bool Checkerboard::hasMandatoryPositions(int player){
+	clearMandatoryPositions();
+	bool hasMandatory = false;
+	map<int,int> tempPos;
+	for (int i = 0; i < BOARD_SIZE; i++){
+		if (boardGame[i] != NULL && boardGame[i]->color == player){
+			tempPos = boardGame[i]->positionValues(i,boardGame);
+			if (!tempPos.empty() && tempPos.begin()->second != -1){
+				mandatoryPositions.push_back(i);
+				hasMandatory = true;
+			}
+		}
+	}
+	return hasMandatory;
+}
+
+bool Checkerboard::isMandatory(int id){
+	bool isMandatory = false;
+	for (Uint32 i = 0; i < mandatoryPositions.size(); i++){
+		if (mandatoryPositions[i] == id)
+			isMandatory = true;
+	}
+	return isMandatory;
 }
 
 
@@ -81,15 +106,27 @@ void Checkerboard::movePiece(int oldId, int newId){
 }
 
 void Checkerboard::removePiece(int removeId){
-	if (removeId != -1){
-		if (boardGame[removeId]->color == WHITE)
-			whiteNumbers--;
+	if (boardGame[removeId]->color == WHITE)
+		whiteNumbers--;
 
-		else if (boardGame[removeId]->color == BLACK)
-			blackNumbers--;
+	else if (boardGame[removeId]->color == BLACK)
+		blackNumbers--;
 
-		boardGame[removeId] = NULL;
+	boardGame[removeId] = NULL;
+}
+
+bool Checkerboard::hasMoreKill(int newId){
+	setValidPositions(newId);
+	map<int,int>::iterator it;
+	for (it = validPositions.begin(); it != validPositions.end(); 
+											++it){
+		if (it->second != -1){
+			clearMandatoryPositions();
+			mandatoryPositions.push_back(newId);
+			return true;
+		}
 	}
+	return false;
 }
 
 void Checkerboard::checkPromotion(int id){
@@ -105,6 +142,7 @@ void Checkerboard::checkPromotion(int id){
 
 void Checkerboard::updatePieces(SDL_Surface* displayVideo){
 	int oppositeSum = REVERSE_TABLE;
+	
 	for (int i = 0; i < BOARD_SIZE; i++){
 		int x = (i % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
 		int y = (i / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
@@ -141,6 +179,10 @@ void Checkerboard::updatePieces(SDL_Surface* displayVideo){
 
 void Checkerboard::clearValidPositions(){
 	validPositions.clear();
+}
+
+void Checkerboard::clearMandatoryPositions(){
+	mandatoryPositions.clear();
 }
 
 void Checkerboard::clearPieces(){

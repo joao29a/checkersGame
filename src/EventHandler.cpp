@@ -14,6 +14,11 @@ void EventHandler::eventType(SDL_Event* event){
 	}
 }
 
+void EventHandler::checkEvents(SDL_Event* event){
+	while (SDL_PollEvent(event))
+		eventType(event);
+}
+
 void EventHandler::quitGame(){}
 void EventHandler::keyPressedDown(SDLKey key){}
 void EventHandler::mouseLeftPressedDown(int x, int y){}

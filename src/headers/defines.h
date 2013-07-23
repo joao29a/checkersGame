@@ -9,8 +9,9 @@
 #define TOTAL_PIECES WHITE_TOTAL+BLACK_TOTAL
 #define BOARD_SIZE 144 //64 100 144
 #define PIECE_SIZE 50 //75  60  50
-#define REVERSE_TABLE 0 // 0 or 1 
-#define REVERSE_PIECE !REVERSE_TABLE //! for black, without for white
+#define REVERSE_TABLE 0 // don't change it
+#define REVERSE_PIECE !REVERSE_TABLE // don't change it
+#define MANDATORY_KILL false
 #define WHITE_IMAGE "images/white12.png" //8 10 12
 #define BLACK_IMAGE "images/black12.png"
 #define BOARD_IMAGE "images/board12.png"
