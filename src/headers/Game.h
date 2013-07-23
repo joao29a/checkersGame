@@ -4,12 +4,11 @@
 #include <iostream>
 #include <vector>
 #include "SDL/SDL.h"
+#include "SDL/SDL_ttf.h"
 #include "Checkerboard.h"
 #include "EventHandler.h"
 #include "MainMenu.h"
 #include "defines.h"
-
-using namespace std;
 
 class Game: public EventHandler{
 	private:
@@ -26,6 +25,7 @@ class Game: public EventHandler{
 	public:
 		Game();
 		bool initGame();
+		bool startGame();
 		void resetGame();
 		void executeGame();
 		void endGame();

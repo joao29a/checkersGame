@@ -1,12 +1,16 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
+#include "SDL/SDL_ttf.h"
 #include "EventHandler.h"
+#include "defines.h"
 
 class MainMenu: public EventHandler{
-	protected:
+	private:
 		bool* doneGame;
 		bool doneMenu;
+		void defineGame(int pieces_amount, int board_size, int piece_size,
+				int type);
 
 	public:
 		void executeMenu(bool* doneGame);

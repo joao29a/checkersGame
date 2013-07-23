@@ -31,7 +31,8 @@ map<int,int> KingPiece::positionValues(int id, std::vector<Piece*> board){
 			diagonal += 2;
 		}
 	}
-	removeUnkilledPositions(&values);
+	if (MANDATORY_KILL)
+		removeUnkilledPositions(&values);
 	return values;
 }
 

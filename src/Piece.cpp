@@ -39,7 +39,8 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 		}
 		diagonal += 2;
 	}
-	removeUnkilledPositions(&values);
+	if (MANDATORY_KILL)
+		removeUnkilledPositions(&values);
 	return values;
 }
 

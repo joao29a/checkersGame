@@ -7,8 +7,6 @@
 #include <cmath>
 #include "defines.h"
 
-using namespace std;
-
 class Piece{
 	protected:
 		void markPosition(int diagId, int diagonal, map<int,int>* values, 

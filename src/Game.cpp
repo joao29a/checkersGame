@@ -3,23 +3,20 @@
 Game::Game(){
 	displayVideo = NULL;
 	done = false;
-	player = WHITE;
 	sameTurn = false;
-	winner = NONE;
-	oldId = newId = -1;
 }
 
 bool Game::initGame(){
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		return false;
 
+	if (TTF_Init() < 0)
+		return false;
+
 	displayVideo = SDL_SetVideoMode(WIDTH_RESOLUTION, HEIGHT_RESOLUTION,
 			32, SDL_HWSURFACE | SDL_DOUBLEBUF);
 
 	if (displayVideo == NULL)
-		return false;
-
-	if (!gameControl.loadImages())
 		return false;
 
 	return true;
@@ -31,25 +28,39 @@ void Game::resetGame(){
 	winner = NONE;
 	gameControl.initPieces();
 	gameControl.fillBoard();
-	gameControl.clearValidPositions();
 }
 
 void Game::executeGame(){
 	if (!initGame())
 		return;
 
-	gameMenu.executeMenu(&done);
+	if (!startGame())
+		quitGame();
 	
 	SDL_Event event;
 
 	while(!done){
 		checkEvents(&event);
+		if (done) break;
 		checkGameSituation();
 		renderImages();
 	}
 
 	endGame();
 
+}
+
+bool Game::startGame(){
+	SDL_FillRect(displayVideo, NULL, 
+			SDL_MapRGB(displayVideo->format, 0, 0, 0));
+	SDL_Flip(displayVideo);
+
+	gameMenu.executeMenu(&done);
+	gameControl.clearBoard();
+	if (!gameControl.loadImages())
+		return false;
+	resetGame();
+	return true;
 }
 
 void Game::quitGame(){
@@ -60,6 +71,10 @@ void Game::keyPressedDown(SDLKey key){
 	switch(key){
 		case SDLK_r:
 			resetGame();
+			break;
+		case SDLK_e:
+			if (!startGame())
+				quitGame();
 			break;
 		case SDLK_ESCAPE:
 			quitGame();
@@ -146,4 +161,5 @@ void Game::endGame(){
 	SDL_FreeSurface(displayVideo);
 	gameControl.clearBoard();
 	SDL_Quit();
+	TTF_Quit();
 }

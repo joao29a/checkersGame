@@ -1,8 +1,6 @@
 #include "headers/Checkerboard.h"
 
 Checkerboard::Checkerboard(){
-	initPieces();
-	fillBoard();
 	whiteImage = NULL;
 	blackImage = NULL;
 	boardImage = NULL;
@@ -26,15 +24,15 @@ void Checkerboard::initPieces(){
 	clearPieces();
 	for (int i = 0; i < TOTAL_PIECES; i++){
 		Piece *tempPiece = new Piece;
-		if (i < TOTAL_PIECES - WHITE_TOTAL)
+		if (i < TOTAL_PIECES - PIECES_AMOUNT)
 			tempPiece->color = BLACK;
 		else
 			tempPiece->color = WHITE;
 
 		gamePieces.push_back(tempPiece);
 	}
-	whiteNumbers = WHITE_TOTAL;
-	blackNumbers = BLACK_TOTAL;
+	whiteNumbers = PIECES_AMOUNT;
+	blackNumbers = PIECES_AMOUNT;
 }
 
 void Checkerboard::initBoard(){
@@ -199,5 +197,6 @@ void Checkerboard::clearBoard(){
 	SDL_FreeSurface(validImage);
 	clearPieces();
 	clearValidPositions();
+	clearMandatoryPositions();
 	boardGame.clear();
 }
