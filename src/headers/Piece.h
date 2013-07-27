@@ -21,7 +21,6 @@ class Piece{
 		void decrementDiagonal(int diagId, int id, int diagonal,
 				map<int,int>* values, vector<Piece*> board);
 
-		void removeUnkilledPositions(map<int,int>* values);
 		
 		int canKill; //variable to check if this Piece will kill other piece
 
@@ -32,6 +31,7 @@ class Piece{
 		int type;
 		virtual map<int,int> positionValues(int id, 
 						std::vector<Piece*> board);
+		void removeUnkilledPositions(map<int,int>* values);
 		
 };
 

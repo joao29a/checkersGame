@@ -24,6 +24,7 @@ bool Game::initGame(){
 
 void Game::resetGame(){
 	oldId = newId = -1;
+	sameTurn = false;
 	player = WHITE;
 	winner = NONE;
 	gameControl.initPieces();
@@ -36,7 +37,7 @@ void Game::executeGame(){
 
 	if (!startGame())
 		quitGame();
-	
+
 	SDL_Event event;
 
 	while(!done){
@@ -90,19 +91,15 @@ void Game::mouseLeftPressedDown(int x, int y){
 
 	if (id < 0 || id >= BOARD_SIZE) return;
 
-	//if (sameTurn){
-	//	if (!gameControl.isMandatory(id))
-	//		return;
-	//}
-	if (MANDATORY_KILL == true && 
-				gameControl.boardGame[id] != NULL 
+	if (MANDATORY_KILL == true && !sameTurn &&
+			gameControl.boardGame[id] != NULL 
 			&& gameControl.hasMandatoryPositions(player)){
 		if (!gameControl.isMandatory(id)){
 			return;
 		}
 	}
-	
-	if (gameControl.boardGame[id] != NULL && 
+
+	if (!sameTurn && gameControl.boardGame[id] != NULL && 
 			gameControl.boardGame[id]->color == player){
 		oldId = id;
 		newId = -1;
@@ -122,23 +119,25 @@ void Game::checkGameSituation(){
 			if (itValues->first == newId){
 				gameControl.movePiece(oldId,newId);
 				gameControl.checkPromotion(newId);
-				
+
 				if (itValues->second != -1){ // if will kill a piece
 					gameControl.removePiece(itValues->second);
-					//sameTurn = gameControl.hasMoreKill(newId);
-					//if (sameTurn){
-					//	oldId = newId;
-					//	newId = -1;
-					//	return;
-					//}
+					sameTurn = gameControl.hasMoreKill(newId);
+					if (sameTurn){
+						oldId = newId;
+						newId = -1;
+					}
 				}
 
-				if (player == WHITE)
-					player = BLACK;
-				else
-					player = WHITE;
-				oldId = newId = -1;
-				gameControl.clearValidPositions();
+				if (!sameTurn){
+					if (player == WHITE)
+						player = BLACK;
+					else
+						player = WHITE;
+					oldId = newId = -1;
+					gameControl.clearValidPositions();
+				}
+				break;
 			}
 		}
 	}
@@ -150,6 +149,7 @@ void Game::checkGameSituation(){
 
 	if (winner != NONE)
 		quitGame();
+		
 }
 
 void Game::renderImages(){

@@ -116,14 +116,13 @@ void Checkerboard::removePiece(int removeId){
 bool Checkerboard::hasMoreKill(int newId){
 	setValidPositions(newId);
 	map<int,int>::iterator it;
-	for (it = validPositions.begin(); it != validPositions.end(); 
-											++it){
+	for (it = validPositions.begin(); it != validPositions.end(); ++it){
 		if (it->second != -1){
-			clearMandatoryPositions();
-			mandatoryPositions.push_back(newId);
+			boardGame[newId]->removeUnkilledPositions(&validPositions);
 			return true;
 		}
 	}
+	clearValidPositions();
 	return false;
 }
 
