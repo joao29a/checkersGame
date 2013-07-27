@@ -30,17 +30,16 @@ void Game::resetGame(){
 	gameControl.clearValidPositions();
 	if (MANDATORY_KILL)
 		gameControl.clearMandatoryPositions();
-	gameControl.initPieces();
 	gameControl.fillBoard();
 }
 
 void Game::executeGame(){
 	if (!initGame())
 		return;
-
+	
 	if (!startGame())
 		quitGame();
-
+	
 	SDL_Event event;
 
 	while(!done){
@@ -63,7 +62,8 @@ bool Game::startGame(){
 	gameControl.clearBoard();
 	if (!gameControl.loadImages())
 		return false;
-	resetGame();
+	if (!done)
+		resetGame();
 	return true;
 }
 
@@ -145,12 +145,15 @@ void Game::checkGameSituation(){
 			}
 		}
 	}
-
-	if (gameControl.whiteNumbers == 0)
-		winner = BLACK;
-	else if (gameControl.blackNumbers == 0)
+	
+	if (!gameControl.hasPieces(BLACK) 
+			|| !gameControl.canMove(BLACK))
 		winner = WHITE;
-
+		
+	else if (!gameControl.hasPieces(WHITE) 
+			|| !gameControl.canMove(WHITE))
+		winner = BLACK;
+	
 	if (winner != NONE)
 		quitGame();
 		
@@ -162,8 +165,8 @@ void Game::renderGame(){
 }
 
 void Game::endGame(){
-	SDL_FreeSurface(displayVideo);
 	gameControl.clearBoard();
+	SDL_FreeSurface(displayVideo);
 	SDL_Quit();
 	TTF_Quit();
 }

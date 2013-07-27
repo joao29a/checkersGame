@@ -1,7 +1,6 @@
 #include "headers/MainMenu.h"
 
 int PIECES_AMOUNT;
-int TOTAL_PIECES;
 int BOARD_SIZE;
 int PIECE_SIZE;
 bool MANDATORY_KILL = false;
@@ -52,7 +51,6 @@ void MainMenu::quitGame(){
 void MainMenu::defineGame(int pieces_amount, int board_size, int piece_size,
 		int type){
 	PIECES_AMOUNT = pieces_amount;
-	TOTAL_PIECES = PIECES_AMOUNT + PIECES_AMOUNT;
 	BOARD_SIZE = board_size;
 	PIECE_SIZE = piece_size;
 

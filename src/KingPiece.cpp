@@ -1,7 +1,6 @@
 #include "headers/KingPiece.h"
 
-KingPiece::KingPiece(int color){
-	this->color = color;
+KingPiece::KingPiece(int color) : Piece(color){
 	type = KING;
 }
 

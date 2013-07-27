@@ -18,50 +18,59 @@ bool Checkerboard::loadImages(){
 	return true;
 }
 
-void Checkerboard::initPieces(){
-	clearPieces();
-	for (int i = 0; i < TOTAL_PIECES; i++){
-		Piece *tempPiece = new Piece;
-		if (i < TOTAL_PIECES - PIECES_AMOUNT)
-			tempPiece->color = BLACK;
-		else
-			tempPiece->color = WHITE;
-
-		gamePieces.push_back(tempPiece);
-	}
-	whiteNumbers = PIECES_AMOUNT;
-	blackNumbers = PIECES_AMOUNT;
-}
-
-void Checkerboard::initBoard(){
-	boardGame.clear();
-	boardGame.resize(BOARD_SIZE,NULL);
-}
-
 void Checkerboard::fillBoard(){
-	initBoard();
+	clearBoardGame();
 
 	int notFillBegin = ((sqrt(BOARD_SIZE) / 2) - 1) * sqrt(BOARD_SIZE);
-	int notFillEnd = (((sqrt(BOARD_SIZE) / 2) + 1) * sqrt(BOARD_SIZE));
+	int notFillEnd = (((sqrt(BOARD_SIZE) / 2) + 1) * sqrt(BOARD_SIZE)) - 1;
 
-	int fillTurn = BLACK;
-	int piecesPos = 0;
 	int oppositeSum = REVERSE_PIECE;
+	int blackPieces = 0;
+	int whitePieces = 0;
 
 	for (int i = 0; i < BOARD_SIZE; i++){
-		if (i == notFillBegin){
-			fillTurn = WHITE;
-			i = notFillEnd;
-		}
-		if (i % (int)sqrt(BOARD_SIZE) == 0)
+		Piece *tempPiece = NULL;
+
+		int modValue = i % (int)sqrt(BOARD_SIZE);
+
+		if (modValue == 0)
 			oppositeSum = !oppositeSum;
-		if (gamePieces[piecesPos] != NULL && 
-				gamePieces[piecesPos]->color == fillTurn && 
-				((i + oppositeSum) % 2 == 0)){
-			boardGame[i] = gamePieces[piecesPos];
-			piecesPos++;
+
+		int modOpposite = (i + oppositeSum) % 2;
+
+		if (i < notFillBegin && modOpposite == 0 && 
+				blackPieces <= PIECES_AMOUNT){
+			tempPiece = new Piece(BLACK);
+			blackPieces++;
+		}
+		else if (i > notFillEnd && modOpposite == 0 && 
+				whitePieces <= PIECES_AMOUNT){
+			tempPiece = new Piece(WHITE);
+			whitePieces++;
+		}
+
+		boardGame.push_back(tempPiece);
+	}
+}
+
+bool Checkerboard::hasPieces(int color){
+	for (Uint32 i = 0; i < boardGame.size(); i++){
+		if (boardGame[i] != NULL && boardGame[i]->color == color)
+			return true;
+	}
+	return false;
+}
+
+bool Checkerboard::canMove(int color){
+	for (Uint32 i = 0; i < boardGame.size(); i++){
+		map<int,int> tempPositions;
+		if (boardGame[i] != NULL && boardGame[i]->color == color){
+			tempPositions = boardGame[i]->positionValues(i,boardGame);
+			if (!tempPositions.empty())
+				return true;
 		}
 	}
+	return false;
 }
 
 void Checkerboard::setValidPositions(int id){
@@ -102,12 +111,7 @@ void Checkerboard::movePiece(int oldId, int newId){
 }
 
 void Checkerboard::removePiece(int removeId){
-	if (boardGame[removeId]->color == WHITE)
-		whiteNumbers--;
-
-	else if (boardGame[removeId]->color == BLACK)
-		blackNumbers--;
-
+	delete boardGame[removeId];
 	boardGame[removeId] = NULL;
 }
 
@@ -187,7 +191,7 @@ void Checkerboard::renderMandatory(SDL_Surface* displayVideo){
 
 		Render::drawRect(displayVideo, x, y, PIECE_SIZE, PIECE_SIZE,
 				R_POS, G_POS, B_POS);
-				
+
 		renderPiece(displayVideo,NULL,0,mandatoryPositions[i],x,y);
 	}
 }
@@ -226,19 +230,19 @@ void Checkerboard::clearMandatoryPositions(){
 	mandatoryPositions.clear();
 }
 
-void Checkerboard::clearPieces(){
-	for (Uint32 i = 0; i < gamePieces.size(); i++){
-		delete gamePieces[i];
+void Checkerboard::clearBoardGame(){
+	for (Uint32 i = 0; i < boardGame.size(); i++){
+		if (boardGame[i] != NULL)
+			delete boardGame[i];
 	}
-	gamePieces.clear();
+	boardGame.clear();
 }
 
 void Checkerboard::clearBoard(){
 	SDL_FreeSurface(whiteImage);
 	SDL_FreeSurface(blackImage);
 	SDL_FreeSurface(boardImage);
-	clearPieces();
 	clearValidPositions();
 	clearMandatoryPositions();
-	boardGame.clear();
+	clearBoardGame();
 }

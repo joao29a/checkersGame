@@ -1,7 +1,7 @@
 #include "headers/Piece.h"
 
-Piece::Piece(){
-	color = NONE;
+Piece::Piece(int color){
+	this->color = color;
 	type = NONE;
 	canKill = false;
 }
@@ -52,6 +52,10 @@ void Piece::markPosition(int diagId, int diagonal, map<int,int>* values,
 
 		if (diagId % (int)sqrt(BOARD_SIZE) == 0 ||
 				diagId % (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1)
+			return;
+		
+		if (diagId / (int)sqrt(BOARD_SIZE) == 0 ||
+				diagId / (int)sqrt(BOARD_SIZE) == (int)sqrt(BOARD_SIZE) - 1)
 			return;
 		selectTarget(diagId,diagonal,values,board);
 	}

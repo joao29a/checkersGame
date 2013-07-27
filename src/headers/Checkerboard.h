@@ -13,12 +13,10 @@
 
 class Checkerboard{
 	private:
-		std::vector<Piece*> gamePieces;
 		std::vector<int> mandatoryPositions;
 		SDL_Surface* whiteImage;
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
-		void initBoard();
 		void renderBoard(SDL_Surface* displayVideo);
 		void renderPiece(SDL_Surface* displayVideo, SDL_Surface* board, 
 				int type, int pos, int x, int y);
@@ -30,11 +28,10 @@ class Checkerboard{
 		Checkerboard();
 		std::vector<Piece*> boardGame;
 		std::map<int,int> validPositions;
-		int whiteNumbers;
-		int blackNumbers;
 		bool loadImages();
-		void initPieces();
 		void fillBoard();
+		bool hasPieces(int color);
+		bool canMove(int color);
 		void movePiece(int oldId, int newId);
 		void removePiece(int removeId);
 		bool hasMoreKill(int newId);
@@ -45,7 +42,7 @@ class Checkerboard{
 		void setValidPositions(int id);
 		void clearValidPositions();
 		void clearMandatoryPositions();
-		void clearPieces();
+		void clearBoardGame();
 		void clearBoard();
 };
 

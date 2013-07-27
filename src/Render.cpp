@@ -1,6 +1,9 @@
 #include "headers/Render.h"
 
 SDL_Surface* Render::assignImage(const char* file){
+	if (file == NULL)
+		return NULL;
+	
 	SDL_Surface* newImage;
 	SDL_Surface* tempImage = IMG_Load(file);
 

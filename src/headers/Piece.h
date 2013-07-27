@@ -25,7 +25,7 @@ class Piece{
 		int canKill; //variable to check if this Piece will kill other piece
 
 	public:
-		Piece();
+		Piece(int color);
 		virtual ~Piece(){}
 		int color;
 		int type;
