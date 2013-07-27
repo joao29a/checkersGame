@@ -18,7 +18,7 @@ class Game: public EventHandler{
 		bool done;
 		int oldId, newId;
 		SDL_Surface* displayVideo;
-		void renderImages();
+		void renderGame();
 		Checkerboard gameControl;
 		MainMenu gameMenu;
 	

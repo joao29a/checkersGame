@@ -28,6 +28,8 @@ void Game::resetGame(){
 	player = WHITE;
 	winner = NONE;
 	gameControl.clearValidPositions();
+	if (MANDATORY_KILL)
+		gameControl.clearMandatoryPositions();
 	gameControl.initPieces();
 	gameControl.fillBoard();
 }
@@ -45,7 +47,7 @@ void Game::executeGame(){
 		checkEvents(&event);
 		if (done) break;
 		checkGameSituation();
-		renderImages();
+		renderGame();
 	}
 
 	endGame();
@@ -154,8 +156,8 @@ void Game::checkGameSituation(){
 		
 }
 
-void Game::renderImages(){
-	gameControl.updatePieces(displayVideo, oldId);
+void Game::renderGame(){
+	gameControl.renderGame(displayVideo, oldId);
 	SDL_Flip(displayVideo);
 }
 

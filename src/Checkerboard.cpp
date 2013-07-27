@@ -135,16 +135,20 @@ void Checkerboard::checkPromotion(int id){
 	}
 }
 
-void Checkerboard::updatePieces(SDL_Surface* displayVideo, int pos){
-	int oppositeSum = REVERSE_TABLE;
-	int x,y;
-	SDL_Rect dest;
-	Uint32 color;
+void Checkerboard::renderGame(SDL_Surface* displayVideo, int pos){
+	renderBoard(displayVideo);
+	renderPos(displayVideo,pos);
+	if (MANDATORY_KILL)
+		renderMandatory(displayVideo);
+	renderValid(displayVideo);
+}
 
-	//draw the board game
+//draw the board game
+void Checkerboard::renderBoard(SDL_Surface* displayVideo){
+	int oppositeSum = REVERSE_TABLE;
 	for (int i = 0; i < BOARD_SIZE; i++){
-		x = (i % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-		y = (i / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int x = (i % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int y = (i / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
 
 		if (i % (int)sqrt(BOARD_SIZE) == 0)
 			oppositeSum = !oppositeSum;
@@ -154,72 +158,64 @@ void Checkerboard::updatePieces(SDL_Surface* displayVideo, int pos){
 					((i + oppositeSum) % 2) * PIECE_SIZE,0,PIECE_SIZE, 
 					PIECE_SIZE);
 
-		else if (boardGame[i]->color == BLACK)
-			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
-					* PIECE_SIZE, blackImage, x, y, boardGame[i]->type * 
-					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
-
-		else if (boardGame[i]->color == WHITE)
-			Render::drawImage(displayVideo, boardImage, ((i + oppositeSum) % 2)
-					* PIECE_SIZE, whiteImage, x, y, boardGame[i]->type * 
-					PIECE_SIZE, 0, PIECE_SIZE,PIECE_SIZE);
+		else
+			renderPiece(displayVideo,boardImage,
+					((i + oppositeSum) % 2) * PIECE_SIZE,i,x,y);
 	}
 
-	
-	x = (pos % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-	y = (pos / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-	
-	//draw the select position
+}
+
+//draw the select position
+void Checkerboard::renderPos(SDL_Surface* displayVideo, int pos){
+	int x = (pos % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+	int y = (pos / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+
 	if (pos != -1 && boardGame[pos] != NULL){
-		Render::drawRect(&dest,x,y,PIECE_SIZE,PIECE_SIZE);
-		color = SDL_MapRGB(displayVideo->format,R_POS,G_POS,B_POS);
-		SDL_FillRect(displayVideo,&dest,color);
+		Render::drawRect(displayVideo, x, y, PIECE_SIZE, PIECE_SIZE,
+				R_POS, G_POS, B_POS);
 
-		if (boardGame[pos]->color == BLACK)
-			Render::drawImage(displayVideo, blackImage, x, y, 
-					boardGame[pos]->type * PIECE_SIZE, 0, 
-					PIECE_SIZE,PIECE_SIZE);
-
-		else if (boardGame[pos]->color == WHITE)
-			Render::drawImage(displayVideo, whiteImage, x, y, 
-					boardGame[pos]->type * PIECE_SIZE, 0, 
-					PIECE_SIZE,PIECE_SIZE);
-	}
-	
-	//draw mandatory positions
-	if (MANDATORY_KILL){
-		for (Uint32 i = 0; i < mandatoryPositions.size(); i++){
-			x = (mandatoryPositions[i] % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-			y = (mandatoryPositions[i] / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-
-			Render::drawRect(&dest,x,y,PIECE_SIZE,PIECE_SIZE);
-			color = SDL_MapRGB(displayVideo->format,R_POS,G_POS,B_POS);
-			SDL_FillRect(displayVideo,&dest,color);
-
-			if (boardGame[mandatoryPositions[i]]->color == BLACK)
-				Render::drawImage(displayVideo, blackImage, x, y, 
-						boardGame[mandatoryPositions[i]]->type * PIECE_SIZE
-						, 0, PIECE_SIZE,PIECE_SIZE);
-			
-			else if (boardGame[mandatoryPositions[i]]->color == WHITE)
-				Render::drawImage(displayVideo, whiteImage, x, y, 
-						boardGame[mandatoryPositions[i]]->type * PIECE_SIZE
-						, 0, PIECE_SIZE,PIECE_SIZE);
-		}
+		renderPiece(displayVideo,NULL,0,pos,x,y);
 	}
 
-	//draw valid positions
+}
+
+//draw mandatory positions
+void Checkerboard::renderMandatory(SDL_Surface* displayVideo){
+	for (Uint32 i = 0; i < mandatoryPositions.size(); i++){
+		int x = (mandatoryPositions[i] % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int y = (mandatoryPositions[i] / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+
+		Render::drawRect(displayVideo, x, y, PIECE_SIZE, PIECE_SIZE,
+				R_POS, G_POS, B_POS);
+				
+		renderPiece(displayVideo,NULL,0,mandatoryPositions[i],x,y);
+	}
+}
+
+//draw valid positions
+void Checkerboard::renderValid(SDL_Surface* displayVideo){
 	map<int,int>::iterator itValue;
 	for (itValue = validPositions.begin(); itValue != validPositions.end();
 			++itValue){
-		x = (itValue->first % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
-		y = (itValue->first / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int x = (itValue->first % (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
+		int y = (itValue->first / (int)sqrt(BOARD_SIZE)) * PIECE_SIZE;
 
-		Render::drawRect(&dest,x,y,PIECE_SIZE,PIECE_SIZE);
-		color = SDL_MapRGB(displayVideo->format,R_VALID,G_VALID,B_VALID);
-		SDL_FillRect(displayVideo,&dest,color);
-
+		Render::drawRect(displayVideo, x, y, PIECE_SIZE, PIECE_SIZE,
+				R_VALID, G_VALID, B_VALID);
 	}
+}
+
+void Checkerboard::renderPiece(SDL_Surface* displayVideo, SDL_Surface* board,
+		int type, int pos, int x, int y){
+	if (boardGame[pos]->color == BLACK)
+		Render::drawImage(displayVideo, board, type, blackImage, x, y, 
+				boardGame[pos]->type * PIECE_SIZE, 0, 
+				PIECE_SIZE,PIECE_SIZE);
+
+	else if (boardGame[pos]->color == WHITE)
+		Render::drawImage(displayVideo, board, type, whiteImage, x, y, 
+				boardGame[pos]->type * PIECE_SIZE, 0, 
+				PIECE_SIZE,PIECE_SIZE);
 }
 
 void Checkerboard::clearValidPositions(){

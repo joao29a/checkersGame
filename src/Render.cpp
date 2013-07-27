@@ -32,13 +32,18 @@ void Render::drawImage(SDL_Surface* dest, SDL_Surface* src, int x,
 
 void Render::drawImage(SDL_Surface* final, SDL_Surface* dest, int type,
 		SDL_Surface* src, int x, int y, int x2, int y2, int w, int h){
-	drawImage(final,dest,x,y,type,y2,w,h);
+	if (dest != NULL)
+		drawImage(final,dest,x,y,type,y2,w,h);
 	drawImage(final,src,x,y,x2,y2,w,h);
 }
 
-void Render::drawRect(SDL_Rect* dest, int x, int y, int w, int h){
-	dest->x = x;
-	dest->y = y;
-	dest->w = w;
-	dest->h = h;
+void Render::drawRect(SDL_Surface* dest, int x, int y, int w, int h,
+		int r, int g, int b){
+	SDL_Rect rect;
+	rect.x = x;
+	rect.y = y;
+	rect.w = w;
+	rect.h = h;
+
+	SDL_FillRect(dest,&rect,SDL_MapRGB(dest->format,r,g,b));
 }

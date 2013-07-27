@@ -19,6 +19,12 @@ class Checkerboard{
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
 		void initBoard();
+		void renderBoard(SDL_Surface* displayVideo);
+		void renderPiece(SDL_Surface* displayVideo, SDL_Surface* board, 
+				int type, int pos, int x, int y);
+		void renderPos(SDL_Surface* displayVideo, int pos);
+		void renderMandatory(SDL_Surface* displayVideo);
+		void renderValid(SDL_Surface* displayVideo);
 
 	public:
 		Checkerboard();
@@ -33,7 +39,7 @@ class Checkerboard{
 		void removePiece(int removeId);
 		bool hasMoreKill(int newId);
 		void checkPromotion(int id);
-		void updatePieces(SDL_Surface* displayVideo, int pos);
+		void renderGame(SDL_Surface* displayVideo, int pos);
 		bool hasMandatoryPositions(int player);
 		bool isMandatory(int id);
 		void setValidPositions(int id);
