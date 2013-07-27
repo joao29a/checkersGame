@@ -18,7 +18,6 @@ class Checkerboard{
 		SDL_Surface* whiteImage;
 		SDL_Surface* blackImage;
 		SDL_Surface* boardImage;
-		SDL_Surface* validImage;
 		void initBoard();
 
 	public:
@@ -34,7 +33,7 @@ class Checkerboard{
 		void removePiece(int removeId);
 		bool hasMoreKill(int newId);
 		void checkPromotion(int id);
-		void updatePieces(SDL_Surface* displayVideo);
+		void updatePieces(SDL_Surface* displayVideo, int pos);
 		bool hasMandatoryPositions(int player);
 		bool isMandatory(int id);
 		void setValidPositions(int id);

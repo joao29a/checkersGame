@@ -8,7 +8,6 @@ bool MANDATORY_KILL = false;
 const char* WHITE_IMAGE;
 const char* BLACK_IMAGE;
 const char* BOARD_IMAGE;
-const char* VALID_IMAGE;
 
 void MainMenu::executeMenu(bool* doneGame){
 	this->doneGame = NULL;
@@ -61,19 +60,16 @@ void MainMenu::defineGame(int pieces_amount, int board_size, int piece_size,
 			WHITE_IMAGE = "images/white8.png";
 			BLACK_IMAGE = "images/black8.png";
 			BOARD_IMAGE = "images/board8.png";
-			VALID_IMAGE = "images/valid8.png";
 	}
 	else if (type == 10){
 			WHITE_IMAGE = "images/white10.png";
 			BLACK_IMAGE = "images/black10.png";
 			BOARD_IMAGE = "images/board10.png";
-			VALID_IMAGE = "images/valid10.png";
 	}
 	else if (type == 12){
 			WHITE_IMAGE = "images/white12.png";
 			BLACK_IMAGE = "images/black12.png";
 			BOARD_IMAGE = "images/board12.png";
-			VALID_IMAGE = "images/valid12.png";
 	}
 	
 	doneMenu = true;

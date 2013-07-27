@@ -35,3 +35,10 @@ void Render::drawImage(SDL_Surface* final, SDL_Surface* dest, int type,
 	drawImage(final,dest,x,y,type,y2,w,h);
 	drawImage(final,src,x,y,x2,y2,w,h);
 }
+
+void Render::drawRect(SDL_Rect* dest, int x, int y, int w, int h){
+	dest->x = x;
+	dest->y = y;
+	dest->w = w;
+	dest->h = h;
+}

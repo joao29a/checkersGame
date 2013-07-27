@@ -27,6 +27,7 @@ void Game::resetGame(){
 	sameTurn = false;
 	player = WHITE;
 	winner = NONE;
+	gameControl.clearValidPositions();
 	gameControl.initPieces();
 	gameControl.fillBoard();
 }
@@ -137,6 +138,7 @@ void Game::checkGameSituation(){
 					oldId = newId = -1;
 					gameControl.clearValidPositions();
 				}
+				gameControl.clearMandatoryPositions();
 				break;
 			}
 		}
@@ -153,7 +155,7 @@ void Game::checkGameSituation(){
 }
 
 void Game::renderImages(){
-	gameControl.updatePieces(displayVideo);
+	gameControl.updatePieces(displayVideo, oldId);
 	SDL_Flip(displayVideo);
 }
 
