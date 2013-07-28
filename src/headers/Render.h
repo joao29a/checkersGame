@@ -1,9 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <iostream>
-#include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
+#include "defines.h"
 
 class Render{
 	public:

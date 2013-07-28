@@ -2,6 +2,7 @@
 
 Game::Game(){
 	displayVideo = NULL;
+	gameControl = new Checkerboard();
 	done = false;
 	sameTurn = false;
 }
@@ -27,10 +28,10 @@ void Game::resetGame(){
 	sameTurn = false;
 	player = WHITE;
 	winner = NONE;
-	gameControl.clearValidPositions();
+	gameControl->clearValidPositions();
 	if (MANDATORY_KILL)
-		gameControl.clearMandatoryPositions();
-	gameControl.fillBoard();
+		gameControl->clearMandatoryPositions();
+	gameControl->fillBoard();
 }
 
 void Game::executeGame(){
@@ -59,8 +60,8 @@ bool Game::startGame(){
 	SDL_Flip(displayVideo);
 
 	gameMenu.executeMenu(&done);
-	gameControl.clearBoard();
-	if (!gameControl.loadImages())
+	gameControl->clearBoard();
+	if (!gameControl->loadImages())
 		return false;
 	if (!done)
 		resetGame();
@@ -95,21 +96,21 @@ void Game::mouseLeftPressedDown(int x, int y){
 	if (id < 0 || id >= BOARD_SIZE) return;
 
 	if (MANDATORY_KILL == true && !sameTurn &&
-			gameControl.boardGame[id] != NULL 
-			&& gameControl.hasMandatoryPositions(player)){
-		if (!gameControl.isMandatory(id)){
+			gameControl->boardGame[id] != NULL 
+			&& gameControl->hasMandatoryPositions(player)){
+		if (!gameControl->isMandatory(id)){
 			return;
 		}
 	}
 
-	if (!sameTurn && gameControl.boardGame[id] != NULL && 
-			gameControl.boardGame[id]->color == player){
+	if (!sameTurn && gameControl->boardGame[id] != NULL && 
+			gameControl->boardGame[id]->color == player){
 		oldId = id;
 		newId = -1;
-		gameControl.clearValidPositions();
-		gameControl.setValidPositions(id);
+		gameControl->clearValidPositions();
+		gameControl->setValidPositions(id);
 	}
-	else if (gameControl.boardGame[id] == NULL){
+	else if (gameControl->boardGame[id] == NULL){
 		newId = id;
 	}
 }
@@ -117,15 +118,15 @@ void Game::mouseLeftPressedDown(int x, int y){
 void Game::checkGameSituation(){
 	if (oldId != newId){
 		map<int,int>::iterator itValues;
-		for (itValues = gameControl.validPositions.begin(); 
-				itValues != gameControl.validPositions.end(); ++itValues){
+		for (itValues = gameControl->validPositions.begin(); 
+				itValues != gameControl->validPositions.end(); ++itValues){
 			if (itValues->first == newId){
-				gameControl.movePiece(oldId,newId);
-				gameControl.checkPromotion(newId);
+				gameControl->movePiece(oldId,newId);
+				gameControl->checkPromotion(newId);
 
 				if (itValues->second != -1){ // if will kill a piece
-					gameControl.removePiece(itValues->second);
-					sameTurn = gameControl.hasMoreKill(newId);
+					gameControl->removePiece(itValues->second);
+					sameTurn = gameControl->hasMoreKill(newId);
 					if (sameTurn){
 						oldId = newId;
 						newId = -1;
@@ -138,20 +139,20 @@ void Game::checkGameSituation(){
 					else
 						player = WHITE;
 					oldId = newId = -1;
-					gameControl.clearValidPositions();
+					gameControl->clearValidPositions();
 				}
-				gameControl.clearMandatoryPositions();
+				gameControl->clearMandatoryPositions();
 				break;
 			}
 		}
 	}
 	
-	if (!gameControl.hasPieces(BLACK) 
-			|| !gameControl.canMove(BLACK))
+	if (!gameControl->hasPieces(BLACK) 
+			|| !gameControl->canMove(BLACK))
 		winner = WHITE;
 		
-	else if (!gameControl.hasPieces(WHITE) 
-			|| !gameControl.canMove(WHITE))
+	else if (!gameControl->hasPieces(WHITE) 
+			|| !gameControl->canMove(WHITE))
 		winner = BLACK;
 	
 	if (winner != NONE)
@@ -160,13 +161,14 @@ void Game::checkGameSituation(){
 }
 
 void Game::renderGame(){
-	gameControl.renderGame(displayVideo, oldId);
+	gameControl->renderGame(displayVideo, oldId);
 	SDL_Flip(displayVideo);
 }
 
 void Game::endGame(){
-	gameControl.clearBoard();
+	gameControl->clearBoard();
 	SDL_FreeSurface(displayVideo);
+	delete gameControl;
 	SDL_Quit();
 	TTF_Quit();
 }

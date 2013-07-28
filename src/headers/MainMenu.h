@@ -1,7 +1,6 @@
 #ifndef MAINMENU_H
 #define MAINMENU_H
 
-#include "SDL/SDL_ttf.h"
 #include "EventHandler.h"
 #include "defines.h"
 

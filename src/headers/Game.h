@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "SDL/SDL.h"
-#include "SDL/SDL_ttf.h"
+#include "Board.h"
 #include "Checkerboard.h"
 #include "EventHandler.h"
 #include "MainMenu.h"
@@ -19,7 +18,7 @@ class Game: public EventHandler{
 		int oldId, newId;
 		SDL_Surface* displayVideo;
 		void renderGame();
-		Checkerboard gameControl;
+		Board* gameControl;
 		MainMenu gameMenu;
 	
 	public:

@@ -6,11 +6,11 @@
 class KingPiece: public Piece{
 	protected:
 		void selectTarget(int diagId, int diagonal, map<int,int>* values,
-				vector<Piece*> board);
+				vector<Object*> board);
 	public:
 		KingPiece(int color);
 		~KingPiece(){}
-		map<int,int> positionValues(int id, vector<Piece*> board);
+		map<int,int> positionValues(int id, vector<Object*> board);
 };
 
 #endif

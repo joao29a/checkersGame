@@ -4,7 +4,7 @@ KingPiece::KingPiece(int color) : Piece(color){
 	type = KING;
 }
 
-map<int,int> KingPiece::positionValues(int id, std::vector<Piece*> board){
+map<int,int> KingPiece::positionValues(int id, std::vector<Object*> board){
 	map<int,int> values;
 	int diagonal = (int)sqrt(BOARD_SIZE) - 1;
 	int diagId = 0;
@@ -36,7 +36,7 @@ map<int,int> KingPiece::positionValues(int id, std::vector<Piece*> board){
 }
 
 void KingPiece::selectTarget(int diagId, int diagonal, map<int,int>* values,
-		vector<Piece*> board){
+		vector<Object*> board){
 	if (this->color != board[diagId]->color && 
 			board[diagId - diagonal] == NULL){
 		values->insert(pair<int,int>(diagId - diagonal,diagId));

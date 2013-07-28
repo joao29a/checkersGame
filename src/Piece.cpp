@@ -1,12 +1,11 @@
 #include "headers/Piece.h"
 
-Piece::Piece(int color){
-	this->color = color;
+Piece::Piece(int color) : Object(color){
 	type = NONE;
 	canKill = false;
 }
 
-map<int,int> Piece::positionValues(int id, vector<Piece*> board){
+map<int,int> Piece::positionValues(int id, vector<Object*> board){
 	map<int,int> values;
 	int diagonal = (int)sqrt(BOARD_SIZE) - 1;
 	int diagId = 0;
@@ -45,7 +44,7 @@ map<int,int> Piece::positionValues(int id, vector<Piece*> board){
 }
 
 void Piece::markPosition(int diagId, int diagonal, map<int,int>* values, 
-		vector<Piece*> board){
+		vector<Object*> board){
 	if (diagId < 0 || diagId >= BOARD_SIZE) return;
 
 	if (board[diagId] != NULL) {
@@ -65,7 +64,7 @@ void Piece::markPosition(int diagId, int diagonal, map<int,int>* values,
 
 
 void Piece::selectTarget(int diagId, int diagonal, map<int,int>* values,
-		vector<Piece*> board){
+		vector<Object*> board){
 
 	if (this->color == WHITE && board[diagId]->color == BLACK &&
 			board[diagId - diagonal] == NULL){
@@ -80,14 +79,14 @@ void Piece::selectTarget(int diagId, int diagonal, map<int,int>* values,
 }
 
 void Piece::decrementDiagonal(int diagId, int id, int diagonal,
-		map<int,int>* values, vector<Piece*> board){
+		map<int,int>* values, vector<Object*> board){
 	diagId = id - diagonal;
 	markPosition(diagId,diagonal,values,board);
 
 }
 
 void Piece::incrementDiagonal(int diagId, int id, int diagonal,
-		map<int,int>* values, vector<Piece*> board){
+		map<int,int>* values, vector<Object*> board){
 	diagId = id + diagonal;
 	markPosition(diagId,diagonal,values,board);
 }
