@@ -6,15 +6,15 @@
 #include "defines.h"
 
 class Object{
-	public:
-		Object(int color);
-		virtual ~Object(){}
-		int color;
-		int type;
+    public:
+        Object(int color);
+        virtual ~Object(){}
+        int color;
+        int type;
 
-		virtual map<int,int> positionValues(int id, 
-					vector<Object*> board);
-		virtual void removeUnkilledPositions(map<int,int>* values);
+        virtual map<int,int> positionValues(int id, 
+                vector<Object*> board);
+        virtual void removeUnkilledPositions(map<int,int>* values);
 };
 
 #endif

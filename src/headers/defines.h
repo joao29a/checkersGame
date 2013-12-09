@@ -11,8 +11,8 @@ using namespace std;
 #define WIDTH_RESOLUTION 600
 #define REVERSE_TABLE 0 //0 or 1 //if reverse_table != reverse_piece then
 #define REVERSE_PIECE 1 //0 or 1 //piece will be on black spots
-								 // else on white spots
-				
+// else on white spots
+
 #define R_VALID 58//valid for positions a piece can go
 #define G_VALID 26
 #define B_VALID 106
@@ -30,10 +30,10 @@ extern const char* BLACK_IMAGE; // "images/black12.png"
 extern const char* BOARD_IMAGE; //"images/board12.png"
 
 enum{
-	NONE = 0,
-	KING,
-	WHITE,
-	BLACK
+    NONE = 0,
+    KING,
+    WHITE,
+    BLACK
 };
 
 #endif
