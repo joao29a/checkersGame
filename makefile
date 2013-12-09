@@ -1,2 +1,2 @@
 all:
-	g++ -Wall -Wextra src/*.cpp -o game -lSDL -lSDL_image -lSDL_ttf
+	g++ -Wall src/*.cpp -o game -lSDL -lSDL_image -lSDL_ttf
